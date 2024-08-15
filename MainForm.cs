@@ -51,10 +51,11 @@ namespace Lifelike
 
             button.Click += (sender, e) =>
             {
-                start = System.DateTime.Now;
-                //timer.Start();
-                progressBar.Value = 100;
-                new Animations.SlideAnimation(progressBar, TimingFunctions.Bounce(TimeSpan.FromSeconds(1)));
+                // start = System.DateTime.Now;
+                // timer.Start();
+                // progressBar.Value = 100;
+                // new Animations.SlideAnimation(progressBar, TimingFunctions.Bounce(TimeSpan.FromSeconds(1)));
+                new Animations.ValueAnimation(progressBar, c => c.Left, 0, 100, TimingFunctions.Bounce(TimeSpan.FromSeconds(1)));
             };
 
             var circle = new MyCircle

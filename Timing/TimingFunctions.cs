@@ -12,8 +12,7 @@ namespace Lifelike.Timing
 
         public static Timing EaseIn(TimeSpan duration) => new Timing(duration, EaseIn);
 
-        //private static double EaseOut(double t) => t * (2 - t);
-        private static double EaseOut(double t) => Math.Sin(t * Math.PI / 2);
+        private static double EaseOut(double t) => t * (2 - t);
 
         public static Timing EaseOut(TimeSpan duration) => new Timing(duration, EaseOut);
 
