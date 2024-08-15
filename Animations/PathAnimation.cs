@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
+using Lifelike.Timing;
 
 namespace Lifelike.Animations
 {
@@ -10,7 +11,7 @@ namespace Lifelike.Animations
     {
         protected readonly GraphicsPath _path;
 
-        public PathAnimation(Control control, Timing.Timing timing, GraphicsPath path)
+        public PathAnimation(Control control, Easing timing, GraphicsPath path)
             : base(control, timing)
         {
             _path = path;
@@ -19,7 +20,6 @@ namespace Lifelike.Animations
         protected override void Update()
         {
             var point = PathHelper.GetPointAtPercentage(_path, (float)Progress);
-            File.AppendAllText("log.txt", $"{point.X}, {point.Y}\n");
             Control.Location = new Point((int)point.X, (int)point.Y);
         }
     }

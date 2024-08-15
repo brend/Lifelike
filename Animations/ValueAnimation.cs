@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Windows.Forms;
+using Lifelike.Timing;
 
 namespace Lifelike.Animations
 {
@@ -15,7 +16,7 @@ namespace Lifelike.Animations
             Expression<System.Func<Control, int>> property,
             double startValue, 
             double endValue, 
-            Timing.Timing? timingFunction = null)
+            Easing? timingFunction = null)
             : base(control, timingFunction)
         {
             _property = property;

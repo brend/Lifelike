@@ -1,5 +1,6 @@
 using System.Drawing;
 using System.Windows.Forms;
+using Lifelike.Timing;
 
 namespace Lifelike.Animations
 {
@@ -8,7 +9,7 @@ namespace Lifelike.Animations
         private readonly Point _origin;
         private readonly Point _destination;
 
-        public MoveAnimation(Control control, Point destination, Timing.Timing? timingFunction = null)
+        public MoveAnimation(Control control, Point destination, Easing? timingFunction = null)
             : base(control, timingFunction)
         {
             _origin = control.Location;

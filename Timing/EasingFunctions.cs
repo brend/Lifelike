@@ -2,23 +2,23 @@ using System;
 
 namespace Lifelike.Timing
 {
-    public static class TimingFunctions
+    public static class EasingFunctions
     {
         private static double Linear(double t) => t;
 
-        public static Timing Linear(TimeSpan duration) => new Timing(duration, Linear);
+        public static Easing Linear(TimeSpan duration) => new Easing(duration, Linear);
 
         private static double EaseIn(double t) => t * t;
 
-        public static Timing EaseIn(TimeSpan duration) => new Timing(duration, EaseIn);
+        public static Easing EaseIn(TimeSpan duration) => new Easing(duration, EaseIn);
 
         private static double EaseOut(double t) => t * (2 - t);
 
-        public static Timing EaseOut(TimeSpan duration) => new Timing(duration, EaseOut);
+        public static Easing EaseOut(TimeSpan duration) => new Easing(duration, EaseOut);
 
         private static double EaseInOut(double t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 
-        public static Timing EaseInOut(TimeSpan duration) => new Timing(duration, EaseInOut);
+        public static Easing EaseInOut(TimeSpan duration) => new Easing(duration, EaseInOut);
 
         private static double Bounce(double t)
         {
@@ -32,6 +32,6 @@ namespace Lifelike.Timing
                 return 7.5625 * (t -= 2.625 / 2.75) * t + 0.984375;
         }
 
-        public static Timing Bounce(TimeSpan duration) => new Timing(duration, Bounce);
+        public static Easing Bounce(TimeSpan duration) => new Easing(duration, Bounce);
     }
 }

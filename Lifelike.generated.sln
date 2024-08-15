@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lifelike", "Lifelike.csproj", "{7F5B4413-2EE6-44E2-B4AC-606B35318277}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lifelike", "Lifelike.csproj", "{570A0B9F-1387-4F91-8727-DDF15AC19C39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7F5B4413-2EE6-44E2-B4AC-606B35318277}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F5B4413-2EE6-44E2-B4AC-606B35318277}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F5B4413-2EE6-44E2-B4AC-606B35318277}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F5B4413-2EE6-44E2-B4AC-606B35318277}.Release|Any CPU.Build.0 = Release|Any CPU
+		{570A0B9F-1387-4F91-8727-DDF15AC19C39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{570A0B9F-1387-4F91-8727-DDF15AC19C39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{570A0B9F-1387-4F91-8727-DDF15AC19C39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{570A0B9F-1387-4F91-8727-DDF15AC19C39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F95A107C-1CCB-4CCB-99E1-A254004D8BDE}
+		SolutionGuid = {C15F32E6-69BC-4958-B66E-95E531A0581B}
 	EndGlobalSection
 EndGlobal

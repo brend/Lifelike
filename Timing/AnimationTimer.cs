@@ -12,9 +12,9 @@ namespace Lifelike.Timing
 
         private readonly Timer _timer = new Timer { Interval = 10 };
         private Stopwatch _stopwatch = new Stopwatch();
-        private readonly Timing _timingFunction;
+        private readonly Easing _timingFunction;
 
-        public AnimationTimer(Timing timingFunction)
+        public AnimationTimer(Easing timingFunction)
         {
             _timingFunction = timingFunction;
             _timer.Tick += TimerTick;
