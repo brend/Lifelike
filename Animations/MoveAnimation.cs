@@ -1,22 +1,19 @@
-using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Lifelike.Timing;
 
 namespace Lifelike.Animations
 {
-    public class SlideAnimation : AnimationBase
+    public class MoveAnimation : AnimationBase
     {
         private readonly Point _origin;
         private readonly Point _destination;
 
-        public SlideAnimation(Control control, Timing.Timing? timingFunction = null)
+        public MoveAnimation(Control control, Point destination, Timing.Timing? timingFunction = null)
             : base(control, timingFunction)
         {
-            _origin = new Point(-control.Width, control.Location.Y);
-            _destination = control.Location;
+            _origin = control.Location;
+            _destination = destination;
 
-            Control.Location = _origin;
             Start();
         }
 

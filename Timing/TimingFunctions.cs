@@ -1,6 +1,6 @@
 using System;
 
-namespace Lifelike
+namespace Lifelike.Timing
 {
     public static class TimingFunctions
     {
@@ -12,7 +12,8 @@ namespace Lifelike
 
         public static Timing EaseIn(TimeSpan duration) => new Timing(duration, EaseIn);
 
-        private static double EaseOut(double t) => t * (2 - t);
+        //private static double EaseOut(double t) => t * (2 - t);
+        private static double EaseOut(double t) => Math.Sin(t * Math.PI / 2);
 
         public static Timing EaseOut(TimeSpan duration) => new Timing(duration, EaseOut);
 

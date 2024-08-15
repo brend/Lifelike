@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace Lifelike
+namespace Lifelike.Timing
 {
     public class AnimationTimer
     {
@@ -46,5 +46,7 @@ namespace Lifelike
         }
 
         protected virtual void OnTick() => Tick?.Invoke(this, EventArgs.Empty);
+
+        public bool IsCompleted => Progress >= 0.999;
     }
 }

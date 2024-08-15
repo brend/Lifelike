@@ -1,17 +1,19 @@
 using System;
+using System.IO;
 using System.Windows.Forms;
+using Lifelike.Timing;
 
 namespace Lifelike.Animations
 {
     public abstract class AnimationBase
     {
-        public static Timing DefaultTimingFunction = 
+        public static Timing.Timing DefaultTimingFunction = 
             TimingFunctions.EaseInOut(TimeSpan.FromSeconds(1));
 
         private readonly AnimationTimer _timer;
         public Control Control { get; }
 
-        protected AnimationBase(Control control, Timing? timingFunction = null)
+        protected AnimationBase(Control control, Timing.Timing? timingFunction = null)
         {
             Control = control;
             _timer = new AnimationTimer(timingFunction ?? DefaultTimingFunction);
@@ -29,7 +31,7 @@ namespace Lifelike.Animations
         private void TimerTick(object sender, EventArgs e)
         {
             Update();
-            if (_timer.Progress >= 1)
+            if (_timer.IsCompleted)
             {
                 _timer.Stop();
             }

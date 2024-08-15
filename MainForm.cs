@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using Lifelike.Timing;
 
 namespace Lifelike
 {
@@ -44,7 +45,8 @@ namespace Lifelike
                 Text = "Click me!",
                 AutoSize = true,
                 Location = new System.Drawing.Point(Width / 2, Height / 2 + 50),
-                Parent = this
+                Parent = this,
+                Name = "button",
             };
 
             button.Click += (sender, e) =>
@@ -54,8 +56,26 @@ namespace Lifelike
                 progressBar.Value = 100;
                 new Animations.SlideAnimation(progressBar, TimingFunctions.Bounce(TimeSpan.FromSeconds(1)));
             };
+
+            var circle = new MyCircle
+            {
+                Location = new System.Drawing.Point(Width / 2 - 50, Height / 2 - 50),
+                Width = 32,
+                Height = 32,
+                Parent = this,
+                Name = "circle",
+            };
         }
 
         System.DateTime start, end;
+
+        protected override void OnClick(EventArgs e)
+        {
+            base.OnClick(e);
+
+            var circle = Controls["circle"];
+            var position = PointToClient(MousePosition) - new System.Drawing.Size(circle.Width / 2, circle.Height / 2);
+            new Animations.MoveAnimation(circle, position, TimingFunctions.EaseOut(TimeSpan.FromSeconds(1)));
+        }
     }
 }

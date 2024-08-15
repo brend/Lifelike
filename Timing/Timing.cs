@@ -1,8 +1,8 @@
-namespace Lifelike
-{
-    using System;
-    using TimingFunc = System.Func<double, double>;
+using System;
+using TimingFunc = System.Func<double, double>;
 
+namespace Lifelike.Timing
+{
     public struct Timing
     {
         public TimeSpan Duration { get; }
