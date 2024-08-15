@@ -38,6 +38,7 @@ namespace Lifelike.Animations
                     timer.Dispose();
                 }
             };
+            
             control.BackColor = fadedColor;
             control.Show();
             timer.Start();

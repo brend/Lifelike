@@ -12,15 +12,27 @@ namespace Lifelike
             StartPosition = FormStartPosition.CenterScreen;
             BackColor = System.Drawing.Color.White;
 
-            var label = new Label
+            var progressBar = new ProgressBar
             {
-                Text = "Hello, Lifelike!",
-                AutoSize = true,
-                Font = new System.Drawing.Font("Arial", 24),
-                ForeColor = System.Drawing.Color.Black,
-                Location = new System.Drawing.Point(Width / 2, Height / 2),
-                BackColor = System.Drawing.Color.Bisque,
+                Minimum = 0,
+                Maximum = 100,
+                Value = 0,
+                Width = 200,
+                Height = 20,
+                Location = new System.Drawing.Point(Width / 2 - 100, Height / 2 + 100),
                 Parent = this
+            };
+
+            var timer = new AnimationTimer();
+            timer.Tick += (sender, e) =>
+            {
+                this.Text = $"Progress: {timer.Progress:P0}";
+                progressBar.Value = (int)(timer.Progress * 100);
+                if (timer.Progress >= 1)
+                {
+                    end = System.DateTime.Now;
+                    MessageBox.Show($"Animation took {(end - start).TotalMilliseconds} ms");
+                }
             };
 
             var button = new Button
@@ -33,8 +45,11 @@ namespace Lifelike
 
             button.Click += (sender, e) =>
             {
-                Animations.SlideAnimation.SlideInFromLeft(label);
+                start = System.DateTime.Now;
+                timer.Start();
             };
         }
+
+        System.DateTime start, end;
     }
 }
