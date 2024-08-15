@@ -27,7 +27,7 @@ namespace Lifelike
                 Parent = this
             };
 
-            timer = new AnimationTimer(TimeSpan.FromSeconds(3), TimingFunctions.Bounce);
+            timer = new AnimationTimer(TimingFunctions.Bounce(TimeSpan.FromSeconds(1)));
             timer.Tick += (sender, e) =>
             {
                 this.Text = $"Progress: {timer.Progress:P0}";
@@ -52,7 +52,7 @@ namespace Lifelike
                 start = System.DateTime.Now;
                 //timer.Start();
                 progressBar.Value = 100;
-                new Animations.SlideAnimation(progressBar, TimeSpan.FromSeconds(3), TimingFunctions.Bounce);
+                new Animations.SlideAnimation(progressBar, TimingFunctions.Bounce(TimeSpan.FromSeconds(1)));
             };
         }
 

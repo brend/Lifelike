@@ -9,8 +9,8 @@ namespace Lifelike.Animations
         private readonly Point _origin;
         private readonly Point _destination;
 
-        public SlideAnimation(Control control, TimeSpan duration, Func<double, double> timingFunction = null)
-            : base(control, duration, timingFunction)
+        public SlideAnimation(Control control, Timing? timingFunction = null)
+            : base(control, timingFunction)
         {
             _origin = new Point(-control.Width, control.Location.Y);
             _destination = control.Location;

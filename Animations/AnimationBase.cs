@@ -5,14 +5,16 @@ namespace Lifelike.Animations
 {
     public abstract class AnimationBase
     {
+        public static Timing DefaultTimingFunction = 
+            TimingFunctions.EaseInOut(TimeSpan.FromSeconds(1));
+
         private readonly AnimationTimer _timer;
         public Control Control { get; }
 
-        protected AnimationBase(Control control, TimeSpan duration, Func<double, double> timingFunction = null)
+        protected AnimationBase(Control control, Timing? timingFunction = null)
         {
             Control = control;
-            timingFunction = timingFunction ?? TimingFunctions.EaseOut;
-            _timer = new AnimationTimer(duration, timingFunction);
+            _timer = new AnimationTimer(timingFunction ?? DefaultTimingFunction);
             _timer.Tick += TimerTick;
         }
 

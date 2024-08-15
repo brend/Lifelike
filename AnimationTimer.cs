@@ -8,19 +8,15 @@ namespace Lifelike
     {
         public event EventHandler Tick;
 
-        public static TimeSpan DefaultAnimationDuration = TimeSpan.FromMilliseconds(500);
-
-        public TimeSpan Duration { get; }
         public double Progress { get; private set; }
 
         private readonly Timer _timer = new Timer { Interval = 10 };
         private Stopwatch _stopwatch = new Stopwatch();
-        private readonly Func<double, double> _timingFunction = t => t;
+        private readonly Timing _timingFunction;
 
-        public AnimationTimer(TimeSpan? duration = null, Func<double, double> timingFunction = null)
+        public AnimationTimer(Timing timingFunction)
         {
-            _timingFunction = timingFunction ?? TimingFunctions.EaseOut;
-            Duration = duration ?? DefaultAnimationDuration;
+            _timingFunction = timingFunction;
             _timer.Tick += TimerTick;
         }
 
@@ -39,8 +35,7 @@ namespace Lifelike
 
         private void TimerTick(object sender, EventArgs e)
         {
-            var elapsed = _stopwatch.Elapsed;
-            Progress = _timingFunction(Math.Min(1, elapsed.TotalMilliseconds / Duration.TotalMilliseconds));
+            Progress = _timingFunction.Apply(_stopwatch.Elapsed);
             if (Progress >= 1)
             {
                 Progress = 1;
