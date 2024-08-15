@@ -1,42 +1,40 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Lifelike.Animations
 {
     public class SlideAnimation
     {
-        public static void SlideInFromLeft(Control control, TimeSpan? duration = null)
+        private readonly AnimationTimer _timer;
+        private readonly Control _control;
+        private readonly Point _origin;
+        private readonly Point _destination;
+
+        public SlideAnimation(Control control, TimeSpan duration, Func<double, double> timingFunction = null)
         {
-            var durationInMilliseconds = (duration ?? FadeAnimation.DefaultAnimationDuration).TotalMilliseconds;
+            _control = control;
+            _origin = new Point(-control.Width, control.Location.Y);
+            _destination = control.Location;
+            timingFunction = timingFunction ?? TimingFunctions.EaseOut;
+            _timer = new AnimationTimer(duration, timingFunction);
+            _timer.Tick += TimerTick;
 
-            if (durationInMilliseconds <= 0)
+            _control.Location = _origin;
+            _timer.Start();
+        }
+
+        private void TimerTick(object sender, EventArgs e)
+        {
+            _control.Location = new Point(
+                (int)(_origin.X + (_destination.X - _origin.X) * _timer.Progress),
+                (int)(_origin.Y + (_destination.Y - _origin.Y) * _timer.Progress)
+            );
+            
+            if (_timer.Progress >= 1)
             {
-                return;
+                _timer.Stop();
             }
-
-            var interval = 10;
-            var steps = durationInMilliseconds / interval;
-            int step = 0;
-            var timer = new Timer { Interval = interval };
-
-            var originalLocation = control.Location;
-            var targetLocation = new System.Drawing.Point(0, originalLocation.Y);
-
-            timer.Tick += (sender, e) =>
-            {
-                step++;
-                var x = (int)(originalLocation.X * (double)step / steps);
-                control.Location = new System.Drawing.Point(x, originalLocation.Y);
-                if (step >= steps)
-                {
-                    control.Location = originalLocation;
-                    timer.Stop();
-                    timer.Dispose();
-                }
-            };
-            control.Location = new System.Drawing.Point(-control.Width, originalLocation.Y);
-            control.Show();
-            timer.Start();
         }
     }
 }

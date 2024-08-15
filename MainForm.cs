@@ -50,7 +50,9 @@ namespace Lifelike
             button.Click += (sender, e) =>
             {
                 start = System.DateTime.Now;
-                timer.Start();
+                //timer.Start();
+                progressBar.Value = 100;
+                new Animations.SlideAnimation(progressBar, TimeSpan.FromSeconds(3), TimingFunctions.Bounce);
             };
         }
 
