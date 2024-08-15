@@ -17,8 +17,9 @@ namespace Lifelike
         private Stopwatch _stopwatch = new Stopwatch();
         private readonly Func<double, double> _timingFunction = t => t;
 
-        public AnimationTimer(TimeSpan? duration = null)
+        public AnimationTimer(TimeSpan? duration = null, Func<double, double> timingFunction = null)
         {
+            _timingFunction = timingFunction ?? TimingFunctions.EaseOut;
             Duration = duration ?? DefaultAnimationDuration;
             _timer.Tick += TimerTick;
         }

@@ -1,18 +1,22 @@
+using System;
 using System.Windows.Forms;
 
 namespace Lifelike
 {
     public class MainForm : Form
     {
+        AnimationTimer timer;
+
         public MainForm()
         {
+            DoubleBuffered = true;
             Text = "Lifelike";
             Width = 800;
             Height = 600;
             StartPosition = FormStartPosition.CenterScreen;
             BackColor = System.Drawing.Color.White;
 
-            var progressBar = new ProgressBar
+            var progressBar = new MyBar
             {
                 Minimum = 0,
                 Maximum = 100,
@@ -23,7 +27,7 @@ namespace Lifelike
                 Parent = this
             };
 
-            var timer = new AnimationTimer();
+            timer = new AnimationTimer(TimeSpan.FromSeconds(3), TimingFunctions.Bounce);
             timer.Tick += (sender, e) =>
             {
                 this.Text = $"Progress: {timer.Progress:P0}";
@@ -31,7 +35,7 @@ namespace Lifelike
                 if (timer.Progress >= 1)
                 {
                     end = System.DateTime.Now;
-                    MessageBox.Show($"Animation took {(end - start).TotalMilliseconds} ms");
+                    Text = $"Animation took {(end - start).TotalMilliseconds} ms";
                 }
             };
 
