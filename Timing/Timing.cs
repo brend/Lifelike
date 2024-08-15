@@ -3,7 +3,7 @@ using TimingFunc = System.Func<double, double>;
 
 namespace Lifelike.Timing
 {
-    public struct Timing
+    public readonly struct Timing
     {
         public TimeSpan Duration { get; }
 

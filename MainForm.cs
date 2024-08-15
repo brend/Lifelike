@@ -1,4 +1,6 @@
 using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Lifelike.Timing;
 
@@ -6,8 +8,6 @@ namespace Lifelike
 {
     public class MainForm : Form
     {
-        AnimationTimer timer;
-
         public MainForm()
         {
             DoubleBuffered = true;
@@ -28,18 +28,6 @@ namespace Lifelike
                 Parent = this
             };
 
-            timer = new AnimationTimer(TimingFunctions.Bounce(TimeSpan.FromSeconds(1)));
-            timer.Tick += (sender, e) =>
-            {
-                this.Text = $"Progress: {timer.Progress:P0}";
-                progressBar.Value = (int)(timer.Progress * 100);
-                if (timer.Progress >= 1)
-                {
-                    end = System.DateTime.Now;
-                    Text = $"Animation took {(end - start).TotalMilliseconds} ms";
-                }
-            };
-
             var button = new Button
             {
                 Text = "Click me!",
@@ -47,15 +35,6 @@ namespace Lifelike
                 Location = new System.Drawing.Point(Width / 2, Height / 2 + 50),
                 Parent = this,
                 Name = "button",
-            };
-
-            button.Click += (sender, e) =>
-            {
-                // start = System.DateTime.Now;
-                // timer.Start();
-                // progressBar.Value = 100;
-                // new Animations.SlideAnimation(progressBar, TimingFunctions.Bounce(TimeSpan.FromSeconds(1)));
-                new Animations.ValueAnimation(progressBar, c => c.Left, 0, 100, TimingFunctions.Bounce(TimeSpan.FromSeconds(1)));
             };
 
             var circle = new MyCircle
@@ -68,15 +47,26 @@ namespace Lifelike
             };
         }
 
-        System.DateTime start, end;
+        Animations.AnimationBase animation;
 
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
 
             var circle = Controls["circle"];
-            var position = PointToClient(MousePosition) - new System.Drawing.Size(circle.Width / 2, circle.Height / 2);
-            new Animations.MoveAnimation(circle, position, TimingFunctions.EaseOut(TimeSpan.FromSeconds(1)));
+            var position = PointToClient(MousePosition);
+            var path = new GraphicsPath();
+            var radius = 100;
+            
+            // var transformation = new Matrix();
+            // transformation.RotateAt(45, position);
+            // path.AddRectangle(new System.Drawing.Rectangle(position.X - radius, position.Y - radius, 2 * radius, 2 * radius));
+            // path.Transform(transformation);
+
+            path.AddEllipse(position.X - radius, position.Y - radius, 2 * radius, 2 * radius);
+
+            animation = new Animations.PathAnimation(circle, TimingFunctions.Bounce(TimeSpan.FromSeconds(3)), path);
+            animation.Start();
         }
     }
 }
