@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Lifelike
@@ -11,12 +12,10 @@ namespace Lifelike
 
         public TimeSpan Duration { get; }
         public double Progress { get; private set; }
-        
-        private readonly Timer _timer = new Timer { Interval = 10 };
-        private TimeSpan _elapsed = TimeSpan.Zero;
-        private readonly Func<double, double> _timingFunction = t => t;
 
-        private DateTime _lastTick = DateTime.Now;
+        private readonly Timer _timer = new Timer { Interval = 10 };
+        private Stopwatch _stopwatch = new Stopwatch();
+        private readonly Func<double, double> _timingFunction = t => t;
 
         public AnimationTimer(TimeSpan? duration = null)
         {
@@ -26,22 +25,26 @@ namespace Lifelike
 
         public void Start()
         {
-            _elapsed = TimeSpan.Zero;
-            _lastTick = DateTime.Now;
-             _timer.Start();
+            Progress = 0;
+            _stopwatch.Restart();
+            _timer.Start();
         }
 
-        public void Stop() => _timer.Stop();
+        public void Stop()
+        {
+            _timer.Stop();
+            _stopwatch.Stop();
+        }
 
         private void TimerTick(object sender, EventArgs e)
         {
-            var now = DateTime.Now;
-            _elapsed += now - _lastTick;
-            Progress = _timingFunction(Math.Min(1, _elapsed.TotalMilliseconds / Duration.TotalMilliseconds));
+            var elapsed = _stopwatch.Elapsed;
+            Progress = _timingFunction(Math.Min(1, elapsed.TotalMilliseconds / Duration.TotalMilliseconds));
             if (Progress >= 1)
             {
                 Progress = 1;
                 _timer.Stop();
+                _stopwatch.Stop();
             }
             OnTick();
         }
