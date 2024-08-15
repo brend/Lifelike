@@ -4,37 +4,27 @@ using System.Windows.Forms;
 
 namespace Lifelike.Animations
 {
-    public class SlideAnimation
+    public class SlideAnimation : AnimationBase
     {
-        private readonly AnimationTimer _timer;
-        private readonly Control _control;
         private readonly Point _origin;
         private readonly Point _destination;
 
         public SlideAnimation(Control control, TimeSpan duration, Func<double, double> timingFunction = null)
+            : base(control, duration, timingFunction)
         {
-            _control = control;
             _origin = new Point(-control.Width, control.Location.Y);
             _destination = control.Location;
-            timingFunction = timingFunction ?? TimingFunctions.EaseOut;
-            _timer = new AnimationTimer(duration, timingFunction);
-            _timer.Tick += TimerTick;
 
-            _control.Location = _origin;
-            _timer.Start();
+            Control.Location = _origin;
+            Start();
         }
 
-        private void TimerTick(object sender, EventArgs e)
+        protected override void Update()
         {
-            _control.Location = new Point(
-                (int)(_origin.X + (_destination.X - _origin.X) * _timer.Progress),
-                (int)(_origin.Y + (_destination.Y - _origin.Y) * _timer.Progress)
+            Control.Location = new Point(
+                (int)(_origin.X + (_destination.X - _origin.X) * Progress),
+                (int)(_origin.Y + (_destination.Y - _origin.Y) * Progress)
             );
-            
-            if (_timer.Progress >= 1)
-            {
-                _timer.Stop();
-            }
         }
     }
 }
