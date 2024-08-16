@@ -6,7 +6,7 @@ namespace Lifelike.Animations
 {
     public class MoveAnimation : AnimationBase
     {
-        private readonly Point _origin;
+        private Point _origin;
         private readonly Point _destination;
 
         public MoveAnimation(Control control, Point destination, Easing? timingFunction = null)
@@ -14,11 +14,15 @@ namespace Lifelike.Animations
         {
             _origin = control.Location;
             _destination = destination;
-
-            Start();
         }
 
-        public override void Update()
+        public override void Start()
+        {
+            _origin = Control.Location;
+            base.Start();
+        }
+
+        protected override void Update()
         {
             Control.Location = new Point(
                 (int)(_origin.X + (_destination.X - _origin.X) * Progress),

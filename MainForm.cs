@@ -24,6 +24,8 @@ namespace Lifelike
                     return new Point((Width - circle.Width) / 2, (Height - circle.Height) / 2);
                 case "Path":
                     return new Point(Width / 2 + 100, (Height - circle.Height) / 2);
+                case "Sequence":
+                    return new Point(Width / 2 - 100, (Height - circle.Height) / 2);
                 default:
                     return new Point((Width - circle.Width) / 2, (Height - circle.Height) / 2);
             }
@@ -85,6 +87,7 @@ namespace Lifelike
             {
                 "Slide",
                 "Path",
+                "Sequence",
             });
             comboAnimationType.SelectedIndex = 0;
             comboAnimationType.Location = new System.Drawing.Point(comboEasingFunction.Right + 10, button.Top);
@@ -153,9 +156,28 @@ namespace Lifelike
                     animation = new PathAnimation(circle, easingFunction, path);
                 }
                     break;
+                case "Sequence":
+                    var animations = new List<IAnimation>
+                    {
+                        new MoveAnimation(circle, new Point(Width / 2 - 100, (Height - circle.Height) / 2), easingFunction),
+                        new PathAnimation(circle, easingFunction, CreateHeartPath(new Point(Width / 2 - 100, (Height - circle.Height) / 2))),
+                        new MoveAnimation(circle, new Point(Width / 2, (Height - circle.Height) / 2), easingFunction),
+                    };
+                    animation = new SequenceAnimation(animations);
+                    break;
             }
 
             animation.Start();
+        }
+
+        private GraphicsPath CreateHeartPath(Point startAndEnd)
+        {
+            var path = new GraphicsPath();
+            path.StartFigure();
+            path.AddBezier(startAndEnd.X, startAndEnd.Y + 10, startAndEnd.X + 10, startAndEnd.Y - 10, startAndEnd.X + 30, startAndEnd.Y + 10, startAndEnd.X, startAndEnd.Y + 30);
+            path.AddBezier(startAndEnd.X, startAndEnd.Y + 30, startAndEnd.X - 30, startAndEnd.Y + 10, startAndEnd.X - 10, startAndEnd.Y - 10, startAndEnd.X, startAndEnd.Y + 10);
+            path.CloseFigure();
+            return path;
         }
     }
 }

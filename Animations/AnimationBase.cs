@@ -7,6 +7,8 @@ namespace Lifelike.Animations
 {
     public abstract class AnimationBase : IAnimation
     {
+        public event EventHandler Completed;
+
         public static Easing DefaultTimingFunction = 
             EasingFunctions.EaseInOut(TimeSpan.FromSeconds(1));
 
@@ -20,7 +22,9 @@ namespace Lifelike.Animations
             _timer.Tick += TimerTick;
         }
 
-        public void Start() => _timer.Start();
+        protected void OnCompleted() => Completed?.Invoke(this, EventArgs.Empty);
+
+        public virtual void Start() => _timer.Start();
 
         public void Stop() => _timer.Stop();
 
@@ -28,7 +32,7 @@ namespace Lifelike.Animations
 
         public void Resume() => throw new NotImplementedException();
 
-        public abstract void Update();
+        protected abstract void Update();
 
         public double Progress => _timer.Progress;
 
@@ -38,6 +42,7 @@ namespace Lifelike.Animations
             if (IsComplete)
             {
                 _timer.Stop();
+                OnCompleted();
             }
         }
 

@@ -1,40 +1,41 @@
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace Lifelike.Animations
 {
     public class SequenceAnimation : IAnimation
     {
-        public Control Control { get; private set; }
+        public event EventHandler Completed;
+
         public List<IAnimation> Animations { get; private set; }
 
         private Queue<IAnimation> _animationQueue;
 
-        public SequenceAnimation(Control control, IEnumerable<IAnimation> animations)
+        public SequenceAnimation(IEnumerable<IAnimation> animations)
         {
-            Control = control;
             Animations = new List<IAnimation>(animations);
         }
 
         public void Start()
         {
             _animationQueue = new Queue<IAnimation>(Animations);
+            _animationQueue.Peek().Completed += ElementCompleted;
             _animationQueue.Peek().Start();
         }
 
-        public void Update()
+        private void ElementCompleted(object sender, System.EventArgs e)
         {
-            if (_animationQueue.Count == 0)
-                return;
+            var completedElement = _animationQueue.Dequeue();
+            completedElement.Completed -= ElementCompleted;
 
-            _animationQueue.Peek().Update();
-
-            if (_animationQueue.Peek().IsComplete)
+            if (_animationQueue.Count > 0)
             {
-                _animationQueue.Dequeue();
-
-                if (_animationQueue.Count > 0)
-                    _animationQueue.Peek().Start();
+                _animationQueue.Peek().Completed += ElementCompleted;
+                _animationQueue.Peek().Start();
+            }
+            else
+            {
+                Completed?.Invoke(this, EventArgs.Empty);
             }
         }
 
