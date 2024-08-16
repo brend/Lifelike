@@ -28,17 +28,19 @@ namespace Lifelike.Animations
 
         public void Resume() => throw new NotImplementedException();
 
-        protected abstract void Update();
+        public abstract void Update();
 
         public double Progress => _timer.Progress;
 
         private void TimerTick(object sender, EventArgs e)
         {
             Update();
-            if (_timer.IsCompleted)
+            if (IsComplete)
             {
                 _timer.Stop();
             }
         }
+
+        public bool IsComplete => _timer.IsCompleted;
     }
 }

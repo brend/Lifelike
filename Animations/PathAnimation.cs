@@ -17,7 +17,7 @@ namespace Lifelike.Animations
             _path = path;
         }
 
-        protected override void Update()
+        public override void Update()
         {
             var point = PathHelper.GetPointAtPercentage(_path, (float)Progress);
             Control.Location = new Point((int)point.X, (int)point.Y);

@@ -20,7 +20,7 @@ namespace Lifelike.Animations
             Start();
         }
 
-        protected override void Update()
+        public override void Update()
         {
             Control.Location = new Point(
                 (int)(_origin.X + (_destination.X - _origin.X) * Progress),
