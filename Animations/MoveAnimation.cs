@@ -1,16 +1,17 @@
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Lifelike.Timing;
 
 namespace Lifelike.Animations
 {
-    public class MoveAnimation : AnimationBase
+    public class MoveAnimation : ControlAnimation
     {
         private Point _origin;
         private readonly Point _destination;
 
-        public MoveAnimation(Control control, Point destination, Easing? timingFunction = null)
-            : base(control, timingFunction)
+        public MoveAnimation(Control control, TimeSpan duration, Easing timingFunction, Point destination)
+            : base(control, duration, timingFunction)
         {
             _origin = control.Location;
             _destination = destination;

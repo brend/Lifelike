@@ -5,17 +5,14 @@ namespace Lifelike.Timing
 {
     public readonly struct Easing
     {
-        public TimeSpan Duration { get; }
-
         public TimingFunc Function { get; }
 
-        public Easing(TimeSpan duration, TimingFunc function)
+        public Easing(TimingFunc function)
         {
-            Duration = duration;
             Function = function;
         }
 
-        public double Apply(TimeSpan elapsed) => 
-            Function((double)elapsed.TotalMilliseconds / Duration.TotalMilliseconds);
+        public double Apply(TimeSpan duration, TimeSpan elapsed) => 
+            Function(elapsed.TotalMilliseconds / duration.TotalMilliseconds);
     }
 }

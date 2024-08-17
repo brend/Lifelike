@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 namespace Lifelike.Animations
 {
-    /// <summary>
-    /// Execute a group of animations simultaneously.
-    /// </summary>
     public class GroupAnimation : IAnimation
     {
         public event EventHandler Completed;
@@ -35,12 +32,6 @@ namespace Lifelike.Animations
                 Completed?.Invoke(this, EventArgs.Empty);
         }
 
-        public void Stop()
-        {
-            foreach (var animation in Animations)
-                animation.Stop();
-        }
-
         public void Pause()
         {
             foreach (var animation in Animations)
@@ -51,6 +42,12 @@ namespace Lifelike.Animations
         {
             foreach (var animation in Animations)
                 animation.Resume();
+        }
+
+        public void Reset()
+        {
+            foreach (var animation in Animations)
+                animation.Reset();
         }
 
         public bool IsComplete => Animations.TrueForAll(a => a.IsComplete);

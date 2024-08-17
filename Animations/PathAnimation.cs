@@ -1,18 +1,17 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
 using System.Windows.Forms;
 using Lifelike.Timing;
 
 namespace Lifelike.Animations
 {
-    public class PathAnimation : AnimationBase
+    public class PathAnimation : ControlAnimation
     {
         protected readonly GraphicsPath _path;
 
-        public PathAnimation(Control control, Easing timing, GraphicsPath path)
-            : base(control, timing)
+        public PathAnimation(Control control, TimeSpan duration, Easing timingFunction, GraphicsPath path)
+            : base(control, duration, timingFunction)
         {
             _path = path;
         }

@@ -16,6 +16,11 @@ namespace Lifelike.Animations
             Animations = new List<IAnimation>(animations);
         }
 
+        public SequenceAnimation(params IAnimation[] animations)
+            : this((IEnumerable<IAnimation>)animations)
+        {
+        }
+
         public void Start()
         {
             _animationQueue = new Queue<IAnimation>(Animations);
@@ -39,15 +44,6 @@ namespace Lifelike.Animations
             }
         }
 
-        public void Stop()
-        {
-            if (_animationQueue != null)
-            {
-                foreach (var animation in _animationQueue)
-                    animation.Stop();
-            }
-        }
-
         public void Pause()
         {
             if (_animationQueue != null)
@@ -63,6 +59,15 @@ namespace Lifelike.Animations
             {
                 foreach (var animation in _animationQueue)
                     animation.Resume();
+            }
+        }
+
+        public void Reset()
+        {
+            if (_animationQueue != null)
+            {
+                foreach (var animation in _animationQueue)
+                    animation.Reset();
             }
         }
 

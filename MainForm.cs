@@ -6,11 +6,16 @@ using System.Windows.Forms;
 using Lifelike.Animations;
 using Lifelike.Timing;
 using Lifelike.Controls;
+using System.Runtime.InteropServices;
 
 namespace Lifelike
 {
     public class MainForm : Form
-    {
+    {        
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+
         readonly Control circle;
         readonly Button button;
         readonly ComboBox comboEasingFunction;
@@ -21,8 +26,6 @@ namespace Lifelike
         {
             switch (animationType)
             {
-                case "Slide":
-                    return new Point((Width - circle.Width) / 2, (Height - circle.Height) / 2);
                 case "Path":
                     return new Point(Width / 2 + 100, (Height - circle.Height) / 2);
                 case "Sequence":
@@ -41,7 +44,7 @@ namespace Lifelike
             Width = 800;
             Height = 600;
             StartPosition = FormStartPosition.CenterScreen;
-            BackColor = System.Drawing.Color.White;
+            BackColor = Color.White;
 
             button = new Button
             {
@@ -50,14 +53,13 @@ namespace Lifelike
                 Parent = this,
                 Name = "button",
             };
-            button.Location = new System.Drawing.Point(50, Height - (button.Height + 50));
+            button.Location = new Point(50, Height - (button.Height + 50));
 
             circle = new MyCircle
             {
                 Width = 32,
                 Height = 32,
                 ForeColor = Color.SteelBlue,
-                // BackColor = Color.Transparent,
                 Parent = this,
                 Name = "circle",
             };
@@ -80,7 +82,7 @@ namespace Lifelike
                 "Bounce",
             });
             comboEasingFunction.SelectedIndex = 3;
-            comboEasingFunction.Location = new System.Drawing.Point(button.Right + 10, button.Top);
+            comboEasingFunction.Location = new Point(button.Right + 10, button.Top);
 
             comboAnimationType = new ComboBox
             {
@@ -90,13 +92,12 @@ namespace Lifelike
             };
             comboAnimationType.Items.AddRange(new object[]
             {
-                "Slide",
                 "Path",
                 "Sequence",
                 "Action",
             });
             comboAnimationType.SelectedIndex = 0;
-            comboAnimationType.Location = new System.Drawing.Point(comboEasingFunction.Right + 10, button.Top);
+            comboAnimationType.Location = new Point(comboEasingFunction.Right + 10, button.Top);
             comboAnimationType.SelectedIndexChanged += AnimationTypeChanged;
 
             numericDuration = new NumericUpDown
@@ -106,44 +107,50 @@ namespace Lifelike
                 Minimum = 100,
                 Maximum = 10000,
                 Value = 1000,
+                Location = new Point(comboAnimationType.Right + 10, button.Top)
             };
-            numericDuration.Location = new System.Drawing.Point(comboAnimationType.Right + 10, button.Top);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            AllocConsole();
         }
 
         void AnimationTypeChanged(object sender, EventArgs e)
         {
             // move the circle to the start position
             var position = GetStartPosition(comboAnimationType.SelectedItem?.ToString());
-            var circleAnimation = new MoveAnimation(circle, position, EasingFunctions.EaseInOut(TimeSpan.FromMilliseconds(1000)));
+            var circleAnimation = new MoveAnimation(circle, TimeSpan.FromSeconds(1), EasingFunctions.EaseOut, position);
             circleAnimation.Start();
             // make the button bounce a little to draw attention
             var buttonLocation = button.Location;
             button.Location = new Point(buttonLocation.X, buttonLocation.Y - 10);
-            var buttonAnimation = new MoveAnimation(button, buttonLocation, EasingFunctions.Bounce(TimeSpan.FromMilliseconds(500)));
+            var buttonAnimation = new MoveAnimation(button, TimeSpan.FromSeconds(0.5), EasingFunctions.Bounce, buttonLocation);
             buttonAnimation.Start();
         }
 
         void ButtonClick(object sender, EventArgs e)
         {
             var duration = TimeSpan.FromMilliseconds((double)numericDuration.Value);
-            Easing easingFunction = EasingFunctions.EaseInOut(duration);
+            Easing easingFunction = EasingFunctions.EaseInOut;
 
             switch (comboEasingFunction.SelectedItem)
             {
                 case "Linear":
-                    easingFunction = EasingFunctions.Linear(duration);
+                    easingFunction = EasingFunctions.Linear;
                     break;
                 case "EaseIn":
-                    easingFunction = EasingFunctions.EaseIn(duration);
+                    easingFunction = EasingFunctions.EaseIn;
                     break;
                 case "EaseOut":
-                    easingFunction = EasingFunctions.EaseOut(duration);
+                    easingFunction = EasingFunctions.EaseOut;
                     break;
                 case "EaseInOut":
-                    easingFunction = EasingFunctions.EaseInOut(duration);
+                    easingFunction = EasingFunctions.EaseInOut;
                     break;
                 case "Bounce":
-                    easingFunction = EasingFunctions.Bounce(duration);
+                    easingFunction = EasingFunctions.Bounce;
                     break;
             }
 
@@ -152,32 +159,32 @@ namespace Lifelike
             switch (comboAnimationType.SelectedItem)
             {
                 default:
-                case "Slide":
-                    animation = new SlideAnimation(circle, easingFunction);
-                    break;
                 case "Path":
                 {
                     var path = new GraphicsPath();
                     path.AddEllipse(Width / 2 - 100, Height / 2 - 100, 200, 200);
-                    animation = new PathAnimation(circle, easingFunction, path);
+                    animation = new PathAnimation(circle, duration, easingFunction, path);
                 }
                     break;
                 case "Sequence":
                     var animations = new List<IAnimation>
                     {
-                        new MoveAnimation(circle, new Point(Width / 2 - 100, (Height - circle.Height) / 2), easingFunction),
-                        new PathAnimation(circle, easingFunction, CreateHeartPath(new Point(Width / 2 - 100, (Height - circle.Height) / 2))),
-                        new MoveAnimation(circle, new Point(Width / 2, (Height - circle.Height) / 2), easingFunction),
+                        new MoveAnimation(circle, duration, easingFunction, new Point(Width / 2 - 100, (Height - circle.Height) / 2)),
+                        new PathAnimation(circle, duration, easingFunction, CreateHeartPath(new Point(Width / 2 - 100, (Height - circle.Height) / 2))),
+                        new MoveAnimation(circle, duration, easingFunction, new Point(Width / 2, (Height - circle.Height) / 2)),
                     };
                     animation = new SequenceAnimation(animations);
                     break;
                 case "Action":
-                    animation = new ActionAnimation(circle, easingFunction, (control, progress) =>
+                    animation = new ActionAnimation(circle, duration, easingFunction, (control, progress) =>
                     {
                         // cycle the color of the circle
                         var c = (int)(progress * 255);
                         control.ForeColor = Color.FromArgb(c, 255 - c, 255 - c);
-                    });
+                    })
+                    {
+                        Repetition = AnimationRepetition.Reverse,
+                    };
                     break;
             }
 

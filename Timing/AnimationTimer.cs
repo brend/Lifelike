@@ -8,21 +8,18 @@ namespace Lifelike.Timing
     {
         public event EventHandler Tick;
 
-        public double Progress { get; private set; }
+        public TimeSpan Elapsed => _stopwatch.Elapsed;
 
         private readonly Timer _timer = new Timer { Interval = 10 };
-        private Stopwatch _stopwatch = new Stopwatch();
-        private readonly Easing _timingFunction;
+        private readonly Stopwatch _stopwatch = new Stopwatch();
 
-        public AnimationTimer(Easing timingFunction)
+        public AnimationTimer()
         {
-            _timingFunction = timingFunction;
             _timer.Tick += TimerTick;
         }
 
         public void Start()
         {
-            Progress = 0;
             _stopwatch.Restart();
             _timer.Start();
         }
@@ -35,19 +32,10 @@ namespace Lifelike.Timing
 
         private void TimerTick(object sender, EventArgs e)
         {
-            Progress = _timingFunction.Apply(_stopwatch.Elapsed);
-            if (Progress >= 1)
-            {
-                Progress = 1;
-                _timer.Stop();
-                _stopwatch.Stop();
-            }
             OnTick();
         }
 
         protected virtual void OnTick() => Tick?.Invoke(this, EventArgs.Empty);
-
-        public bool IsCompleted => Progress >= 0.999;
 
         public void Dispose()
         {

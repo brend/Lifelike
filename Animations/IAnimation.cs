@@ -7,9 +7,9 @@ namespace Lifelike.Animations
         event EventHandler Completed;
 
         void Start();
-        void Stop();
         void Pause();
         void Resume();
+        void Reset();
         bool IsComplete { get; }
     }
 }
