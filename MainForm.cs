@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Lifelike.Animations;
 using Lifelike.Timing;
+using Lifelike.Controls;
 
 namespace Lifelike
 {
@@ -26,6 +27,8 @@ namespace Lifelike
                     return new Point(Width / 2 + 100, (Height - circle.Height) / 2);
                 case "Sequence":
                     return new Point(Width / 2 - 100, (Height - circle.Height) / 2);
+                case "Action":
+                    return new Point((Width - circle.Width) / 2, (Height - circle.Height) / 2);
                 default:
                     return new Point((Width - circle.Width) / 2, (Height - circle.Height) / 2);
             }
@@ -53,6 +56,8 @@ namespace Lifelike
             {
                 Width = 32,
                 Height = 32,
+                ForeColor = Color.SteelBlue,
+                // BackColor = Color.Transparent,
                 Parent = this,
                 Name = "circle",
             };
@@ -88,6 +93,7 @@ namespace Lifelike
                 "Slide",
                 "Path",
                 "Sequence",
+                "Action",
             });
             comboAnimationType.SelectedIndex = 0;
             comboAnimationType.Location = new System.Drawing.Point(comboEasingFunction.Right + 10, button.Top);
@@ -164,6 +170,14 @@ namespace Lifelike
                         new MoveAnimation(circle, new Point(Width / 2, (Height - circle.Height) / 2), easingFunction),
                     };
                     animation = new SequenceAnimation(animations);
+                    break;
+                case "Action":
+                    animation = new ActionAnimation(circle, easingFunction, (control, progress) =>
+                    {
+                        // cycle the color of the circle
+                        var c = (int)(progress * 255);
+                        control.ForeColor = Color.FromArgb(c, 255 - c, 255 - c);
+                    });
                     break;
             }
 

@@ -1,6 +1,7 @@
+using System.Drawing;
 using System.Windows.Forms;
 
-namespace Lifelike
+namespace Lifelike.Controls
 {
     public class MyCircle : Control
     {
@@ -12,7 +13,8 @@ namespace Lifelike
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            e.Graphics.FillEllipse(System.Drawing.Brushes.SteelBlue, 0, 0, Width, Height);
+            using (var brush = new SolidBrush(ForeColor))
+                e.Graphics.FillEllipse(brush, 0, 0, Width, Height);
         }
     }
 }
