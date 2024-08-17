@@ -7,6 +7,7 @@ using Lifelike.Animations;
 using Lifelike.Timing;
 using Lifelike.Controls;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Lifelike
 {
@@ -109,7 +110,22 @@ namespace Lifelike
                 Value = 1000,
                 Location = new Point(comboAnimationType.Right + 10, button.Top)
             };
+
+            var anotherButton = new Button
+            {
+                Text = "Another button",
+                AutoSize = true,
+                Parent = this,
+                Name = "anotherButton",
+            };
+            anotherButton.Location = new Point(50, button.Top - anotherButton.Height - 10);
+            anotherButton.Click += (sender, e) =>
+            {
+                anotherButton.AnimateMove(new Point(_random.Next(Width - anotherButton.Width), _random.Next(Height - anotherButton.Height)));
+            };
         }
+
+        private readonly Random _random = new Random();
 
         protected override void OnLoad(EventArgs e)
         {
