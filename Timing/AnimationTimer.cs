@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Lifelike.Timing
 {
-    public class AnimationTimer
+    public class AnimationTimer : IDisposable
     {
         public event EventHandler Tick;
 
@@ -48,5 +48,11 @@ namespace Lifelike.Timing
         protected virtual void OnTick() => Tick?.Invoke(this, EventArgs.Empty);
 
         public bool IsCompleted => Progress >= 0.999;
+
+        public void Dispose()
+        {
+            _timer.Dispose();
+            _stopwatch.Stop();
+        }
     }
 }

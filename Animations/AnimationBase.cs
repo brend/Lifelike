@@ -5,7 +5,7 @@ using Lifelike.Timing;
 
 namespace Lifelike.Animations
 {
-    public abstract class AnimationBase : IAnimation
+    public abstract class AnimationBase : IAnimation, IDisposable
     {
         public event EventHandler Completed;
 
@@ -47,5 +47,7 @@ namespace Lifelike.Animations
         }
 
         public bool IsComplete => _timer.IsCompleted;
+
+        public void Dispose() => _timer.Dispose();
     }
 }
