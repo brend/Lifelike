@@ -8,8 +8,12 @@ namespace Lifelike.Animations
     {
         public Control Control { get; }
 
-        public ControlAnimation(Control control, TimeSpan duration, Easing timingFunction)
-            : base(duration, timingFunction)
+        public ControlAnimation(
+            Control control,
+            ITimer timer,
+            TimeSpan duration, 
+            Easing timingFunction)
+            : base(timer, duration, timingFunction)
         {
             Control = control;
         }

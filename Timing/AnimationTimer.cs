@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Lifelike.Timing
 {
-    public class AnimationTimer : IDisposable
+    public class AnimationTimer : ITimer, IDisposable
     {
         public event EventHandler Tick;
 

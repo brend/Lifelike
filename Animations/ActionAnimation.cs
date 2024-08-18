@@ -11,10 +11,11 @@ namespace Lifelike.Animations
 
         public ActionAnimation(
             Control control, 
+            ITimer timer,
             TimeSpan duration, 
             Easing timingFunction,
             Action<Control, Progress> action)
-            : base(control, duration, timingFunction)
+            : base(control, timer, duration, timingFunction)
         {
             _action = action ?? throw new ArgumentNullException("action");
         }

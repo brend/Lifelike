@@ -10,8 +10,13 @@ namespace Lifelike.Animations
     {
         protected readonly GraphicsPath _path;
 
-        public PathAnimation(Control control, TimeSpan duration, Easing timingFunction, GraphicsPath path)
-            : base(control, duration, timingFunction)
+        public PathAnimation(
+            Control control, 
+            ITimer timer,
+            TimeSpan duration, 
+            Easing timingFunction, 
+            GraphicsPath path)
+            : base(control, timer, duration, timingFunction)
         {
             _path = path;
         }

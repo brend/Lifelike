@@ -137,13 +137,11 @@ namespace Lifelike
         {
             // move the circle to the start position
             var position = GetStartPosition(comboAnimationType.SelectedItem?.ToString());
-            var circleAnimation = new MoveAnimation(circle, TimeSpan.FromSeconds(1), EasingFunctions.EaseOut, position);
-            circleAnimation.Start();
+            circle.AnimateMove(position);
             // make the button bounce a little to draw attention
             var buttonLocation = button.Location;
             button.Location = new Point(buttonLocation.X, buttonLocation.Y - 10);
-            var buttonAnimation = new MoveAnimation(button, TimeSpan.FromSeconds(0.5), EasingFunctions.Bounce, buttonLocation);
-            buttonAnimation.Start();
+            button.AnimateMove(buttonLocation, timingFunction: EasingFunctions.Bounce);
         }
 
         void ButtonClick(object sender, EventArgs e)
@@ -171,6 +169,7 @@ namespace Lifelike
             }
 
             IAnimation animation = null;
+            ITimer timer = new AnimationTimer();
 
             switch (comboAnimationType.SelectedItem)
             {
@@ -179,20 +178,20 @@ namespace Lifelike
                 {
                     var path = new GraphicsPath();
                     path.AddEllipse(Width / 2 - 100, Height / 2 - 100, 200, 200);
-                    animation = new PathAnimation(circle, duration, easingFunction, path);
+                    animation = new PathAnimation(circle, timer, duration, easingFunction, path);
                 }
                     break;
                 case "Sequence":
                     var animations = new List<IAnimation>
                     {
-                        new MoveAnimation(circle, duration, easingFunction, new Point(Width / 2 - 100, (Height - circle.Height) / 2)),
-                        new PathAnimation(circle, duration, easingFunction, CreateHeartPath(new Point(Width / 2 - 100, (Height - circle.Height) / 2))),
-                        new MoveAnimation(circle, duration, easingFunction, new Point(Width / 2, (Height - circle.Height) / 2)),
+                        new MoveAnimation(circle, timer, duration, easingFunction, new Point(Width / 2 - 100, (Height - circle.Height) / 2)),
+                        new PathAnimation(circle, timer, duration, easingFunction, CreateHeartPath(new Point(Width / 2 - 100, (Height - circle.Height) / 2))),
+                        new MoveAnimation(circle, timer, duration, easingFunction, new Point(Width / 2, (Height - circle.Height) / 2)),
                     };
                     animation = new SequenceAnimation(animations);
                     break;
                 case "Action":
-                    animation = new ActionAnimation(circle, duration, easingFunction, (control, progress) =>
+                    animation = new ActionAnimation(circle, timer, duration, easingFunction, (control, progress) =>
                     {
                         // cycle the color of the circle
                         var c = (int)(progress * 255);

@@ -7,7 +7,7 @@ namespace Lifelike.Animations
     {
         public event EventHandler Completed;
 
-        private readonly AnimationTimer _timer = new AnimationTimer();
+        private readonly ITimer _timer;
         private readonly TimeSpan _duration;
         private TimeSpan _elapsed;
         private readonly Easing _timingFunction;
@@ -17,8 +17,12 @@ namespace Lifelike.Animations
 
         public AnimationDirection Direction { get; set; } = AnimationDirection.Forward;
 
-        protected TimedAnimation(TimeSpan duration, Easing timingFunction)
+        protected TimedAnimation(
+            ITimer timer,
+            TimeSpan duration, 
+            Easing timingFunction)
         {
+            _timer = timer;
             _duration = duration;
             _timingFunction = timingFunction;
             _timer.Tick += TimerTick;

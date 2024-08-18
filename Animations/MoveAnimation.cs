@@ -10,8 +10,13 @@ namespace Lifelike.Animations
         private Point _origin;
         private readonly Point _destination;
 
-        public MoveAnimation(Control control, TimeSpan duration, Easing timingFunction, Point destination)
-            : base(control, duration, timingFunction)
+        public MoveAnimation(
+            Control control, 
+            ITimer timer,
+            TimeSpan duration, 
+            Easing timingFunction, 
+            Point destination)
+            : base(control, timer, duration, timingFunction)
         {
             _origin = control.Location;
             _destination = destination;
